@@ -1,5 +1,6 @@
 <?php
 
+use App\Handlers\ContactHandler;
 use App\Handlers\LeadHandler;
 use Symfony\Component\Dotenv\Dotenv;
 use App\Factories\ApiClientFactory;
@@ -27,4 +28,10 @@ if (isset($_POST['leads']['add'][0])) {
 if (isset($_POST['leads']['update'][0])) {
     $leadHandler = new LeadHandler($apiClient, $dbConnector);
     $leadHandler->handleLeadUpdate($_POST['leads']['update'][0]);
+}
+
+// Добавляем контакт
+if (isset($_POST['contacts']['add'][0])) {
+    $contactHandler = new ContactHandler($apiClient, $dbConnector);
+    $contactHandler->handleNewContact($_POST['contacts']['add'][0]);
 }
