@@ -1,3 +1,4 @@
 amocrm-api-php/
 vendor/
 .idea
+.env
