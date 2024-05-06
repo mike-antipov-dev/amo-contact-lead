@@ -80,10 +80,11 @@ class ContactHandler
             } catch (Exception $e) {
                 echo "Ошибка добавления полей: " . $e->getMessage() . "\n";
             }
-        }    }
+        }
+    }
 
     /**
-     * Обновляем контакта
+     * Обновляем контакт
      *
      * @param array $contact
      * @throws Exception
