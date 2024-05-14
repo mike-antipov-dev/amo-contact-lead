@@ -102,84 +102,84 @@ class ContactHandler
             echo "Ошибка получения данных о контакте: " . $e->getMessage() . "\n";
         }
 
-//        if ($existingData) {
-//            $changes = [];
-//
-//            if ($contact['name'] !== $existingData['name']) {
-//                $changes['name'] = "Название контакта изменено с '{$existingData['name']}' на '{$contact['name']}'";
-//            }
-//
-//            // Ищем название статуса по ID
-//            if ((int)$contact['status_id'] !== $existingData['status_id']) {
-//                $statusId = (int)$contact['status_id'];
-//                try {
-//                    $pipelinesService = $this->apiClient->pipelines();
-//                    $pipelines = $pipelinesService->get();
-//                    $statusName = null;
-//
-//                    foreach ($pipelines as $pipeline) {
-//                        foreach ($pipeline->getStatuses() as $status) {
-//                            if ($status->getId() == $statusId) {
-//                                $statusName = $status->getName();
-//                                break 2;
-//                            }
-//                        }
-//                    }
-//                } catch (AmoCRMApiException $e) {
-//                    echo "Ошибка получения данных о контактах: " . $e->getMessage();
-//                }
-//
-//                $changes['status_id'] = "Статус контакта изменён на $statusName";
-//            }
-//
-//            if ($contact['price'] !== $existingData['price']) {
-//                $changes['price'] = "Бюджет изменен с '{$existingData['price']}' на '{$contact['price']}'";
-//            }
-//
-//            if ((int)$contact['responsible_user_id'] !== $existingData['responsible_user_id']) {
-//                $existingUserData = $this->getResponsibleUser($existingData['responsible_user_id']);
-//                $newUserData = $this->getResponsibleUser($existingData['responsible_user_id']);
-//                $changes['responsible_user_id'] = "Отвественный измнен с '{$existingUserData['userName']}' на '{$newUserData['userName']}'";
-//            }
-//
-//            if (!empty($changes)) {
-//                $message = '';
-//                foreach ($changes as $field => $change) {
-//                    $message .= "$change\n";
-//                }
-//
-//                $date = date('d.m.Y H:i:s', $contact['last_modified']);
-//                $date = str_replace(' ', ', ', $date);
-//                $message .= "Дата/время изменения: $date";
-//                $this->addNoteToContact($contact['id'], $message);
-//            }
-//        }
-//
-//        // Обновляем запись в БД
-//        try {
-//            $stmt = $this->pdo->prepare("UPDATE contacts SET name = :name, status_id = :status_id, old_status_id = :old_status_id, price = :price, responsible_user_id = :responsible_user_id,
-//        last_modified = :last_modified, modified_user_id = :modified_user_id, created_user_id = :created_user_id,
-//        date_create = :date_create, pipeline_id = :pipeline_id, account_id = :account_id, created_at = :created_at,
-//        updated_at = :updated_at WHERE id = :id");
-//            $stmt->execute([
-//                ':id' => $contact['id'],
-//                ':name' => $contact['name'],
-//                ':status_id' => $contact['status_id'],
-//                ':old_status_id' => $contact['old_status_id'],
-//                ':price' => $contact['price'],
-//                ':responsible_user_id' => $contact['responsible_user_id'],
-//                ':last_modified' => $contact['last_modified'],
-//                ':modified_user_id' => $contact['modified_user_id'],
-//                ':created_user_id' => $contact['created_user_id'],
-//                ':date_create' => $contact['date_create'],
-//                ':pipeline_id' => $contact['pipeline_id'],
-//                ':account_id' => $contact['account_id'],
-//                ':created_at' => $contact['created_at'],
-//                ':updated_at' => $contact['updated_at']
-//            ]);
-//        } catch (Exception $e) {
-//            echo "Ошибка обновления контакта: " . $e->getMessage() . "\n";
-//        }
+        if ($existingData) {
+            $changes = [];
+
+            if ($contact['name'] !== $existingData['name']) {
+                $changes['name'] = "Название контакта изменено с '{$existingData['name']}' на '{$contact['name']}'";
+            }
+
+            // Ищем название статуса по ID
+            if ((int)$contact['status_id'] !== $existingData['status_id']) {
+                $statusId = (int)$contact['status_id'];
+                try {
+                    $pipelinesService = $this->apiClient->pipelines();
+                    $pipelines = $pipelinesService->get();
+                    $statusName = null;
+
+                    foreach ($pipelines as $pipeline) {
+                        foreach ($pipeline->getStatuses() as $status) {
+                            if ($status->getId() == $statusId) {
+                                $statusName = $status->getName();
+                                break 2;
+                            }
+                        }
+                    }
+                } catch (AmoCRMApiException $e) {
+                    echo "Ошибка получения данных о контактах: " . $e->getMessage();
+                }
+
+                $changes['status_id'] = "Статус контакта изменён на $statusName";
+            }
+
+            if ($contact['price'] !== $existingData['price']) {
+                $changes['price'] = "Бюджет изменен с '{$existingData['price']}' на '{$contact['price']}'";
+            }
+
+            if ((int)$contact['responsible_user_id'] !== $existingData['responsible_user_id']) {
+                $existingUserData = $this->getResponsibleUser($existingData['responsible_user_id']);
+                $newUserData = $this->getResponsibleUser($existingData['responsible_user_id']);
+                $changes['responsible_user_id'] = "Отвественный измнен с '{$existingUserData['userName']}' на '{$newUserData['userName']}'";
+            }
+
+            if (!empty($changes)) {
+                $message = '';
+                foreach ($changes as $field => $change) {
+                    $message .= "$change\n";
+                }
+
+                $date = date('d.m.Y H:i:s', $contact['last_modified']);
+                $date = str_replace(' ', ', ', $date);
+                $message .= "Дата/время изменения: $date";
+                $this->addNoteToContact($contact['id'], $message);
+            }
+        }
+
+        // Обновляем запись в БД
+        try {
+            $stmt = $this->pdo->prepare("UPDATE contacts SET name = :name, status_id = :status_id, old_status_id = :old_status_id, price = :price, responsible_user_id = :responsible_user_id,
+        last_modified = :last_modified, modified_user_id = :modified_user_id, created_user_id = :created_user_id,
+        date_create = :date_create, pipeline_id = :pipeline_id, account_id = :account_id, created_at = :created_at,
+        updated_at = :updated_at WHERE id = :id");
+            $stmt->execute([
+                ':id' => $contact['id'],
+                ':name' => $contact['name'],
+                ':status_id' => $contact['status_id'],
+                ':old_status_id' => $contact['old_status_id'],
+                ':price' => $contact['price'],
+                ':responsible_user_id' => $contact['responsible_user_id'],
+                ':last_modified' => $contact['last_modified'],
+                ':modified_user_id' => $contact['modified_user_id'],
+                ':created_user_id' => $contact['created_user_id'],
+                ':date_create' => $contact['date_create'],
+                ':pipeline_id' => $contact['pipeline_id'],
+                ':account_id' => $contact['account_id'],
+                ':created_at' => $contact['created_at'],
+                ':updated_at' => $contact['updated_at']
+            ]);
+        } catch (Exception $e) {
+            echo "Ошибка обновления контакта: " . $e->getMessage() . "\n";
+        }
     }
 
     /**
